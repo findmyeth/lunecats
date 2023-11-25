@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @font-face {
+            font-family: 'Daydream';
+            src: url('Retro.ttf') format('truetype');
+        }
+
+        .side-button {
+            background-color: black;
+            color: white;
+            border: 2px solid white;
+            font-family: 'Daydream', Arial, sans-serif;
+            font-size: 20px;
+            border-radius: 0;
+            padding: 10px 20px;
+            margin-right: 10px; /* Spacing between buttons */
+        }
+
+        .side-button:hover {
+            background-color: white;
+            color: black;
+            cursor: pointer;
+        }
+
+        /* Position the side buttons */
+        #twitterButton, #openseaButton {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+        }
+
+        /* Adjust the positioning of the OpenSea Button */
+        #openseaButton {
+            left: calc(160px + 10px); /* Adjust based on the size of the Twitter button */
+        }
+
+
+
+        .info-text {
+            background-color: black; /* Black background */
+            color: white;            /* White text */
+            padding: 10px;           /* Padding around the text */
+            margin-top: -110px;      /* Adjust as needed */
+            text-align: center;
+            border: 2px solid white;
+        }
+
+        .info-text p {
+            font-size: 14px;         /* Adjust font size as needed */
+            color: white;            /* White text */
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+
+        body {
+            background-image: url('background1.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            text-align: center;
+            font-family: 'Daydream', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #000000;
+            position: relative;
+        }
+
+        #container {
+            max-width: 600px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 14px;
+            color: #000000;
+        }
+
+        .mint-button, input {
+            font-family: 'Daydream', Arial, sans-serif;
+            font-size: 20px;
+            background-color: black;
+            color: white;
+            border: 2px solid white;
+            border-radius: 0;
+            padding: 10px 20px;
+        }
+
+        .mint-button:hover, input:hover {
+            background-color: white;
+            color: black;
+            cursor: pointer;
+        }
+
+        #walletButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Connect Wallet Button -->
+    <button class="mint-button" id="walletButton">Connect Wallet</button>
+    <!-- Twitter Button with Link -->
+    <a href="https://twitter.com/yourTwitterHandle" target="_blank">
+        <button class="side-button" id="twitterButton">Twitter</button>
+    </a>
+
+    <!-- OpenSea Button with Link -->
+    <a href="https://opensea.io/yourProfile" target="_blank">
+        <button class="side-button" id="openseaButton">OpenSea</button>
+    </a>
+    <div id="container">
+        <div class="info-text">
+                    <p>2 FREE / WALLET</p>
+                    <p>ADDITIONAL 0.002E</p>
+                    <p id="totalSupplyText"></p>
+        </div>
+        <div>
+            <input type="number" class="token-amount" id="tokenAmount" min="1" max="20" value="2">
+            <button class="mint-button" id="mintTokenButton">MINT</button>
+        </div>
+
+    </div>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <script>
+        // Insert the ABI here
+        const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"ApprovalCallerNotOwnerNorApproved","type":"error"},{"inputs":[],"name":"ApprovalQueryForNonexistentToken","type":"error"},{"inputs":[],"name":"BalanceQueryForZeroAddress","type":"error"},{"inputs":[],"name":"InvalidQueryRange","type":"error"},{"inputs":[],"name":"MintERC2309QuantityExceedsLimit","type":"error"},{"inputs":[],"name":"MintToZeroAddress","type":"error"},{"inputs":[],"name":"MintZeroQuantity","type":"error"},{"inputs":[{"internalType":"address","name":"operator","type":"address"}],"name":"OperatorNotAllowed","type":"error"},{"inputs":[],"name":"OwnerQueryForNonexistentToken","type":"error"},{"inputs":[],"name":"OwnershipNotInitializedForExtraData","type":"error"},{"inputs":[],"name":"TransferCallerNotOwnerNorApproved","type":"error"},{"inputs":[],"name":"TransferFromIncorrectOwner","type":"error"},{"inputs":[],"name":"TransferToNonERC721ReceiverImplementer","type":"error"},{"inputs":[],"name":"TransferToZeroAddress","type":"error"},{"inputs":[],"name":"URIQueryForNonexistentToken","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"approved","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":false,"internalType":"bool","name":"approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"fromTokenId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"toTokenId","type":"uint256"},{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"}],"name":"ConsecutiveTransfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[],"name":"MAX_FREE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MAX_SUPPLY","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"OPERATOR_FILTER_REGISTRY","outputs":[{"internalType":"contract IOperatorFilterRegistry","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"approve","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"contractURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"explicitOwnershipOf","outputs":[{"components":[{"internalType":"address","name":"addr","type":"address"},{"internalType":"uint64","name":"startTimestamp","type":"uint64"},{"internalType":"bool","name":"burned","type":"bool"},{"internalType":"uint24","name":"extraData","type":"uint24"}],"internalType":"struct IERC721A.TokenOwnership","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256[]","name":"tokenIds","type":"uint256[]"}],"name":"explicitOwnershipsOf","outputs":[{"components":[{"internalType":"address","name":"addr","type":"address"},{"internalType":"uint64","name":"startTimestamp","type":"uint64"},{"internalType":"bool","name":"burned","type":"bool"},{"internalType":"uint24","name":"extraData","type":"uint24"}],"internalType":"struct IERC721A.TokenOwnership[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"flipSaleStarted","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"freeMintClaimed","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"freeMintCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"getApproved","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxFreeMintPerWallet","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxMintPerTx","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxPublicMintPerWallet","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_quantity","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"numberMinted","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_numberToMint","type":"uint256"}],"name":"ownerMint","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"uint256","name":"_numberToMint","type":"uint256"}],"name":"ownerMintToAddress","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ownerOf","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"publicTokenPrice","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"saleStarted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"bool","name":"approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"baseURI","type":"string"}],"name":"setBaseURI","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_URI","type":"string"}],"name":"setContractURI","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newMaxFreePerWallet","type":"uint256"}],"name":"setMaxFreePerWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newMaxFree","type":"uint256"}],"name":"setMaxFreeSupply","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_count","type":"uint256"}],"name":"setMaxPublicMintPerWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newPrice","type":"uint256"}],"name":"setPublicTokenPrice","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newSupply","type":"uint256"}],"name":"setTotalMaxSupply","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"tokensOfOwner","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"start","type":"uint256"},{"internalType":"uint256","name":"stop","type":"uint256"}],"name":"tokensOfOwnerIn","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"transferFrom","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawFunds","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_address","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawFundsToAddress","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+
+
+        let currentAccount = null;
+
+        async function connectWallet() {
+            await requestAccount();
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            if (accounts.length > 0) {
+                currentAccount = accounts[0];
+                document.getElementById("connectedWallet").innerText = `Connected Wallet: ${currentAccount}`;
+                document.getElementById("walletButton").innerText = "Disconnect Wallet";
+                document.getElementById("walletButton").onclick = disconnectWallet;
+            }
+        }
+
+        async function disconnectWallet() {
+            if (window.ethereum) {
+                await window.ethereum.request({ method: 'eth_accounts' });
+                currentAccount = null;
+                document.getElementById("connectedWallet").innerText = `No Wallet Connected`;
+                document.getElementById("walletButton").innerText = "Connect Wallet";
+                document.getElementById("walletButton").onclick = connectWallet;
+            }
+        }
+
+        document.getElementById("walletButton").onclick = connectWallet;
+
+
+      const contractAddress = "0x0";
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const contract = new ethers.Contract(contractAddress, abi, provider);
+
+      async function requestAccount() {
+        if (window.ethereum) {
+          try {
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+          } catch (err) {
+            console.error('User denied account access');
+          }
+        } else {
+          alert('MetaMask not detected. Please install MetaMask to interact with this webpage.');
+        }
+      }
+
+      async function getTotalSupply() {
+        const totalSupply = await contract.totalSupply();
+        const MAX_SUPPLY = await contract.MAX_SUPPLY();
+        document.getElementById("totalSupplyText").innerText = `${totalSupply.toString()} / ${MAX_SUPPLY.toString()} Minted`;
+      }
+
+
+      async function mintToken() {
+        const signer = provider.getSigner();
+        const tokenAmount = parseInt(document.getElementById("tokenAmount").value);
+
+        if (tokenAmount < 1) {
+          alert("Please enter a valid number of tokens to mint.");
+          return;
+        }
+
+        const publicTokenPrice = await contract.publicTokenPrice();
+        const totalPrice = publicTokenPrice.mul(tokenAmount);
+
+        const mintTx = await contract.connect(signer).mint(tokenAmount, { value: totalPrice });
+        await mintTx.wait();
+        alert("LUNE.");
+      }
+
+      document.getElementById("mintTokenButton").onclick = async () => {
+        await requestAccount();
+        mintToken();
+      };
+
+      getTotalSupply();
+
+    </script>
+  </body>
+</html>
